@@ -6,6 +6,7 @@ import (
 	"github.com/antchfx/xquery/html"
 )
 
+// Finds the data-big-photo links in the page
 func parsePage(page string) []string {
 	doc, err := htmlquery.Parse(strings.NewReader(page))
 
@@ -19,6 +20,7 @@ func parsePage(page string) []string {
 	return ret
 }
 
+// A worker got handle work input and output
 func parseAllLinks(getWork chan string, result chan string) {
 	for {
 		work, got := <-getWork

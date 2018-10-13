@@ -13,7 +13,7 @@ import (
 	"github.com/antchfx/xquery/html"
 )
 
-// Extracts links from a page, whose innerText has the given string
+// Gets the form ID from login screen in tumblr, needed for future requests
 func getFormID(content io.Reader) (string, error) {
 	doc, err := htmlquery.Parse(content)
 
@@ -27,6 +27,7 @@ func getFormID(content io.Reader) (string, error) {
 	return formID, nil
 }
 
+// Gets a liked page given it's number
 func getPage(pageNum int, client *http.Client) string {
 	resp, err := client.Get("https://www.tumblr.com/likes/page/" + strconv.Itoa(pageNum))
 	if err != nil {
@@ -38,6 +39,7 @@ func getPage(pageNum int, client *http.Client) string {
 	return string(content)
 }
 
+// a worker for easier goroutine
 func getPageWorker(work <-chan int, ready chan<- bool, client *http.Client, collect chan string) {
 	for {
 		pageNum, gotWork := <-work
@@ -50,6 +52,7 @@ func getPageWorker(work <-chan int, ready chan<- bool, client *http.Client, coll
 	ready <- true
 }
 
+// gets all the pages in likes and passes the strings through 'collect'
 func getPages(email, password string, pageCount, workerCount int, collect chan string) {
 	jar, _ := cookiejar.New(&cookiejar.Options{})
 	client := &http.Client{
