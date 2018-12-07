@@ -47,6 +47,15 @@ func getPageWorker(work <-chan int, ready chan<- bool, client *http.Client, coll
 			break
 		}
 
+		/*
+			page := getPage(pageNum, client)
+			lenLink := len(parsePage(page))
+			if lenLink < 3 {
+				writeFile(pageNum, []byte(page))
+				fmt.Fprintf(os.Stderr, "Found fewer than 3: %d.\n", lenLink)
+			}
+		*/
+
 		collect <- getPage(pageNum, client)
 	}
 	ready <- true
