@@ -1,3 +1,5 @@
 pages/
 *.exe
 tumblr-scrape
+posts/
+posts.txt
